@@ -1,0 +1,46 @@
+/* .app{
+    width: 100%;
+    height: 100%;
+} */
+
+table.board {
+   border: 1px solid black;
+   width: 80%;
+   height: 100%;
+   table-layout: fixed;
+}
+
+table.board td {
+   border: 1px solid black;
+   width: 100%;
+   vertical-align: bottom;
+   text-align: center;
+}
+
+table.board tr {
+   border: 1px solid black;
+   height: 70px;
+   width: 100;
+   vertical-align: bottom;
+}
+
+.wave {
+    background-image: url("./images/wave3.jpg");
+    background-size: contain;
+    z-index: 10;
+}
+
+.hit {
+    background-image: url("./images/hit.jpeg");
+    background-size: cover;
+}
+
+.miss {
+    background-color: #000066;
+    z-index: 100;
+}
+
+.torpedo {
+    width: 10%;
+    height: 10%;
+}
