@@ -79,7 +79,7 @@ class Board extends Component {
                     return false
 
     // horizontal right buffer
-                } if ((col + size + 1) < 10) {
+                } if ((col + size) < 10) {
                     if (board[row][col + size] === SHIP) {
                         return false
                     }
@@ -151,7 +151,7 @@ class Board extends Component {
                         if (board[row-1][col + 1]) {
                             return false
                         }
-                    } if(row + 1 < 10) {
+                   } if(row + 1 < 10) {
                         if (board[row + size][col + 1] === SHIP) {
                             return false
                         }
@@ -173,7 +173,7 @@ class Board extends Component {
                 } if ((row - 1) >= 0) {
                     if (board[row -1][col] === SHIP) {
                         return false
-                    }if ((col + size + 1) < 10) {
+                    }if ((col + 1) < 10) {
                         if (board[row-1][col + 1] === SHIP) {
                         return false
                         }
@@ -184,10 +184,10 @@ class Board extends Component {
                     }
 
     // vertical bottom buffer
-                } if ((row + size + 1) < 10) {
+                } if ((row + size) < 10) {
                     if (board[row + size][col] === SHIP) {
                         return false
-                    }if ((col + size + 1) < 10) {
+                    }if ((col + 1) < 10) {
                         if (board[row + size][col + 1] === SHIP) {
                         return false
                         }
