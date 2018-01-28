@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Score from './score'
+import Header from './header'
 
 const EMPTY = 0
 const SHIP = 1
@@ -16,7 +17,18 @@ class Board extends Component {
 
         this.state = {
             board: this.setBoard(),
-            torpedos: 25
+            ships:  [
+                    {size: 5, row: 0, col: 0, orientation: 0},
+                    {size: 4, row: 0, col: 0, orientation: 0},
+                    {size: 4, row: 0, col: 0, orientation: 0},
+                    {size: 3, row: 0, col: 0, orientation: 0},
+                    {size: 3, row: 0, col: 0, orientation: 0},
+                    {size: 2, row: 0, col: 0, orientation: 0},
+                    {size: 2, row: 0, col: 0, orientation: 0},
+                    {size: 1, row: 0, col: 0, orientation: 0},
+                    ],
+            torpedos: 25,
+            hits: 0
         }
     }
 
@@ -44,167 +56,22 @@ class Board extends Component {
     }
 
     placeShips() {
-        let ships = [
-            {size: 5, count: 1},
-            {size: 4, count: 2},
-            {size: 3, count: 2},
-            {size: 2, count: 2},
-            {size: 1, count: 2},
-        ]
+        let ships = this.state.ships
 
         for(let i = 0; i < ships.length; i++) {
             const opt = ships[i]
 
             console.log("Size:", opt.size, "Count:", opt.count);
 
-            for(let i = 0; i < opt.count; i++) {
-                this.placeShip(opt.size)
-            }
+            // for(let i = 0; i < opt.count; i++) {
+            //     this.placeShip(opt.size)
+            // }
+            this.placeShip(opt.size)
         }
     }
 
 
-    checkSpace(board, row, col, size, orientation){
-        for(let i = 0; i < size; i++) {
-
-            if(board[row][col] === SHIP) {
-                return false
-
-            } else if (orientation === HORIZONTAL) {
-
-                if (col + size >= 10) {
-                    return false
-
-                } else if (board[row][col + i] === SHIP) {
-                    return false
-
-    // horizontal right buffer
-                } if ((col + size) < 10) {
-                    if (board[row][col + size] === SHIP) {
-                        return false
-                    }
-                    if((row - 1) >= 0) {
-                        if (board[row - 1][col + size]) {
-                            return false
-                        }
-                    } if(row + 1 < 10) {
-                        if (board[row + 1][col + size] === SHIP) {
-                            return false
-                        }
-                    }
-    // horizontal left buffer
-                } if ((col - 1) >= 0) {
-                    if (board[row][col - 1] === SHIP) {
-                        return false
-                    } if((row - 1) >= 0) {
-                        if(board[row - 1][col -1] === SHIP) {
-                            return false
-                        }
-                    } if((row + 1) < 10) {
-                        if(board[row + 1][col - 1] === SHIP) {
-                            return false
-                        }
-                    }
-    // horizontal top buffer
-                } if ((row - 1) >= 0) {
-                    if (board[row - 1][col + i] === SHIP) {
-                        return false
-                    }if ((col + size + 1) < 10) {
-                        if (board[row - 1][col + size] === SHIP) {
-                            return false
-                        }
-                    }if((col - 1) >= 0) {
-                        if (board[row - 1][col - 1] === SHIP) {
-                        return false
-                        }
-                    }
-
-    // horizontal bottom buffer
-                } if ((row + 1) < 10) {
-                    if (board[row + 1][col + i] === SHIP) {
-                        return false
-                    }if ((col + size + 1) < 10) {
-                        if (board[row + 1][col + size] === SHIP) {
-                        return false
-                        }
-                    }if((col - 1) >= 0) {
-                        if (board[row + 1][col - 1] === SHIP) {
-                        return false
-                        }
-                    }
-                }
-
-
-               } else if (orientation === VERTICAL) {
-
-                if (row + size >= 10) {
-                    return false
-
-                } else if(board[row + i][col] === SHIP) {
-                    return false
-    //vertical right buffer
-                } if ((col + 1) < 10) {
-                    if (board[row + i][col + 1] === SHIP) {
-                        return false
-                    }
-                    if((row - 1) >= 0) {
-                        if (board[row-1][col + 1]) {
-                            return false
-                        }
-                   } if(row + 1 < 10) {
-                        if (board[row + size][col + 1] === SHIP) {
-                            return false
-                        }
-                    }
-    // vertical left buffer
-                } if ((col - 1) >= 0) {
-                    if (board[row + i][col - 1] === SHIP) {
-                        return false
-                    } if((row - 1) >= 0) {
-                        if(board[row -1][col-1] === SHIP) {
-                            return false
-                        }
-                    } if((row + 1) < 10) {
-                        if(board[row + size][col - 1] === SHIP) {
-                            return false
-                        }
-                    }
-    // vertical top buffer
-                } if ((row - 1) >= 0) {
-                    if (board[row -1][col] === SHIP) {
-                        return false
-                    }if ((col + 1) < 10) {
-                        if (board[row-1][col + 1] === SHIP) {
-                        return false
-                        }
-                    }if((col - 1) >= 0) {
-                        if (board[row -1][col-1] === SHIP) {
-                        return false
-                        }
-                    }
-
-    // vertical bottom buffer
-                } if ((row + size) < 10) {
-                    if (board[row + size][col] === SHIP) {
-                        return false
-                    }if ((col + 1) < 10) {
-                        if (board[row + size][col + 1] === SHIP) {
-                        return false
-                        }
-                    }if((col - 1) >= 0) {
-                        if (board[row +size][col - 1] === SHIP) {
-                        return false
-                        }
-                    }
-                }
-
-            }
-                else {
-                return true
-            }
-        }
-    }
-
+//This function grabs the position of the
     placeShip(size) {
         // console.log("setting ship of size:", size);
         const board = this.state.board
@@ -236,11 +103,151 @@ class Board extends Component {
         })
     }
 
-    //This function grabs the position of the
+    checkSpace(board, row, col, size, orientation){
+        for(let i = 0; i < size; i++) {
+
+            if(board[row][col] === SHIP) {
+                return false
+
+            } else if (orientation === HORIZONTAL) {
+
+                if (col + size >= 10) {
+                    return false
+
+                } else if (board[row][col + i] === SHIP) {
+                    return false
+
+                    // horizontal right buffer
+                } if ((col + size) < 10) {
+                    if (board[row][col + size] === SHIP) {
+                        return false
+                    }
+                    if((row - 1) >= 0) {
+                        if (board[row - 1][col + size]) {
+                            return false
+                        }
+                    } if(row + 1 < 10) {
+                        if (board[row + 1][col + size] === SHIP) {
+                            return false
+                        }
+                    }
+                    // horizontal left buffer
+                } if ((col - 1) >= 0) {
+                    if (board[row][col - 1] === SHIP) {
+                        return false
+                    } if((row - 1) >= 0) {
+                        if(board[row - 1][col -1] === SHIP) {
+                            return false
+                        }
+                    } if((row + 1) < 10) {
+                        if(board[row + 1][col - 1] === SHIP) {
+                            return false
+                        }
+                    }
+                    // horizontal top buffer
+                } if ((row - 1) >= 0) {
+                    if (board[row - 1][col + i] === SHIP) {
+                        return false
+                    }if ((col + size + 1) < 10) {
+                        if (board[row - 1][col + size] === SHIP) {
+                            return false
+                        }
+                    }if((col - 1) >= 0) {
+                        if (board[row - 1][col - 1] === SHIP) {
+                            return false
+                        }
+                    }
+
+                    // horizontal bottom buffer
+                } if ((row + 1) < 10) {
+                    if (board[row + 1][col + i] === SHIP) {
+                        return false
+                    }if ((col + size + 1) < 10) {
+                        if (board[row + 1][col + size] === SHIP) {
+                            return false
+                        }
+                    }if((col - 1) >= 0) {
+                        if (board[row + 1][col - 1] === SHIP) {
+                            return false
+                        }
+                    }
+                }
+
+
+            } else if (orientation === VERTICAL) {
+
+                if (row + size >= 10) {
+                    return false
+
+                } else if(board[row + i][col] === SHIP) {
+                    return false
+                    //vertical right buffer
+                } if ((col + 1) < 10) {
+                    if (board[row + i][col + 1] === SHIP) {
+                        return false
+                    }
+                    if((row - 1) >= 0) {
+                        if (board[row-1][col + 1]) {
+                            return false
+                        }
+                    } if(row + 1 < 10) {
+                        if (board[row + size][col + 1] === SHIP) {
+                            return false
+                        }
+                    }
+                    // vertical left buffer
+                } if ((col - 1) >= 0) {
+                    if (board[row + i][col - 1] === SHIP) {
+                        return false
+                    } if((row - 1) >= 0) {
+                        if(board[row -1][col-1] === SHIP) {
+                            return false
+                        }
+                    } if((row + 1) < 10) {
+                        if(board[row + size][col - 1] === SHIP) {
+                            return false
+                        }
+                    }
+                    // vertical top buffer
+                } if ((row - 1) >= 0) {
+                    if (board[row -1][col] === SHIP) {
+                        return false
+                    }if ((col + 1) < 10) {
+                        if (board[row-1][col + 1] === SHIP) {
+                            return false
+                        }
+                    }if((col - 1) >= 0) {
+                        if (board[row -1][col-1] === SHIP) {
+                            return false
+                        }
+                    }
+
+                    // vertical bottom buffer
+                } if ((row + size) < 10) {
+                    if (board[row + size][col] === SHIP) {
+                        return false
+                    }if ((col + 1) < 10) {
+                        if (board[row + size][col + 1] === SHIP) {
+                            return false
+                        }
+                    }if((col - 1) >= 0) {
+                        if (board[row +size][col - 1] === SHIP) {
+                            return false
+                        }
+                    }
+                }
+            }
+            else {
+                return true
+            }
+        }
+    }
+
+
     handleClick(row, col) {
         // console.log("row:", row, "col:", col);
 
-        let { torpedos, board } = this.state
+        let { torpedos, hits, board } = this.state
 
         if(torpedos <= 0) {
             alert("Game Over Sucker")
@@ -252,6 +259,7 @@ class Board extends Component {
             console.log("hit");
             board[row][col] = HIT
             torpedos--
+            hits++
         } else if(board[row][col] === EMPTY) {
             console.log("miss");
             board[row][col] = MISS
@@ -264,9 +272,13 @@ class Board extends Component {
         console.log("torpedos:", torpedos)
         console.log(board)
 
+//checks for ships sunk
+
+
         this.setState({
             board: board,
-            torpedos: torpedos
+            torpedos: torpedos,
+            hits: hits
         })
     }
 
@@ -289,7 +301,7 @@ class Board extends Component {
                 id={row+'_'+col}
                 key={row+'_'+col}
                 className={cssClass}
-                onClick={this.handleClick.bind(this, row, col)}>
+                onClick={this.handleClick.bind(this, row, col)}><div className="content"></div>
             </td>)
         }
 
@@ -308,13 +320,20 @@ class Board extends Component {
 
     render() {
         return (
-            <div>
-                <table className="board">
-                    <tbody>
-                        {this.renderRows()}
-                    </tbody>
-                </table>
-                <Score torpedos ={this.state.torpedos}/>
+            <div className="container boardcontain">
+                <Header />
+                <div className="row">
+                    <div className="col-12">
+                        <table className="board">
+                            <tbody>
+                                {this.renderRows()}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <Score torpedos ={this.state.torpedos} hits ={this.state.hits}/>
+
             </div>
         )
     }
